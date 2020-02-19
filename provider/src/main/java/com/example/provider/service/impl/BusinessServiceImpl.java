@@ -5,6 +5,8 @@ import com.example.provider.mapper.TestMapper;
 import com.example.provider.service.BusinessService;
 import com.example.provider.service.TestTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +23,14 @@ public class BusinessServiceImpl implements BusinessService {
     @Autowired
     private TestTransactionService testTransactionService;
 
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
     @Override
     public String getMessage() {
+        ListOperations<Object, Object> listOperations = redisTemplate.opsForList();
+        listOperations.leftPush("1", "test");
+        listOperations.leftPush("2", "test2");
         return "测试";
     }
 
